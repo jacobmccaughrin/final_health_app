@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Settings</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="style.css" href="server.js">
+        <!-- Include the JavaScript file -->
+        
+    </head>
+    <body>
+        <div class="header">
+          <center>
+            <h1 style="font-size: 100px;">Settings</h1>
+          </center>
+        </div>
+        <!--Sidebar Navigation-->
+        <div id="mySideNav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a onclick="welcome();" data-toggle="modal" data-target="#welcome">About Us</a>
+            <a href="base.html">Home</a>
+            <a href="log_stuff.html">Engagement Log</a>
+            <a href="goal.html">Goals</a>
+          </div>
+          <span style="font-size:50px;cursor:pointer; margin-left: 25px;" onclick="openNav()">&#9776; open</span>
+        <button id="notificationButton" class="btn btn-grad3">Enable Notifications</button>
+        <button id="disableNotificationButton" class="btn btn-grad4">Disable Notifications</button>
+
+        <!--HTML About Us Popup-->
+        <div id="welcome" class="modal fade">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button style = 'color:blue' onclick = 'close_welcome();' class="close" data-dismiss = 'modal'>&timesbar;</button>
+                  <h2 style="width:98%">Empowering individuals to cultivate healthy habits is not just a goal; it's our mission. Together, let's embrace a lifestyle that nourishes our bodies, minds, and spirits. Through encouragement and support, we aspire to inspire everyone to embark on a journey towards well-being. Your health matters, and the choices you make today shape the vitality of your tomorrows. Join us in fostering a community where healthy habits flourish, and each step taken is a stride toward a more vibrant and fulfilling life.</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+    <script>
+      var myInterval;
+var notificationsEnabled = false;
+
+// Function to display browser notifications
+function displayNotification(message) {
+    // Check if the browser supports notifications
+    if (!("Notification" in window)) {
+        console.error("This browser does not support system notifications");
+        return;
+    }
+
+    // Check if notification permission is granted
+    if (Notification.permission === "granted") {
+        // Create and display the notification
+        var notification = new Notification("New Notification", {
+            body: message,
+            
+        });
+    } else if (Notification.permission !== "denied") {
+        // Otherwise, request permission from the user
+        Notification.requestPermission().then(function(permission) {
+            if (permission === "granted") {
+                // If permission is granted, display the notification
+                displayNotification(message);
+            }
+        });
+    }
+}
+
+
+
+// Open the window
+
+// Function to enable notifications
+function enableNotifications() {
+    notificationsEnabled = true;
+    displayNotification("Enabled Notification permissions!");
+    localStorage.setItem('notification', notificationsEnabled);
+    
+    // Start periodic notifications
+    myInterval = setInterval(fetchNotifications, 5000); // 5 seconds in milliseconds
+}
+
+// Function to disable notifications
+function disableNotifications() {
+
+    clearInterval(myInterval); // Clear the interval to stop fetching notifications
+    notificationsEnabled = false;
+    localStorage.setItem('notification', notificationsEnabled);
+    displayNotification("Disabled Notification permissions!"); // Display a notification confirming that notifications are disabled
+
+}
+
+// Function to fetch notifications
+function fetchNotifications() {
+    // Here you can put your notification fetching logic
+    // For demonstration, let's display a message every 5 seconds
+    displayNotification("This is a notification message!");
+}
+
+        // Attach event listener to the "Enable Notifications" button
+        document.getElementById('notificationButton').addEventListener('click', enableNotifications);
+
+        // Attach event listener to the "Disable Notifications" button
+        document.getElementById('disableNotificationButton').addEventListener('click', disableNotifications);
+
+        // Function to open sidenav overlay
+        function openNav(){
+              document.getElementById("mySideNav").style.width = "250px";
+            }
+            function closeNav(){
+              document.getElementById("mySideNav").style.width = "0px";
+            }
+    </script>
+    </body>
+</html>
