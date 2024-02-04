@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Goal Setting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="notifications.js"></script>
+
+    <style>
+        .header {
+            background-color: rgb(190, 236, 201);
+            color: rgb(84, 84, 84);
+            padding: 20px;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .daily-goals-header {
+            margin-left: 300px;
+            margin-top: 100px;
+            font-size: 70px;
+        }
+
+        .menu-icon {
+            font-size: 2.5vw;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" style="height: 200px;">
+        <h1 style="text-align: center; margin-top: 60px;">Goal Setting</h1>       
+    </div>
+
+    <span style="font-size: 2.5vw; cursor: pointer; margin-left: 1vw; position: absolute; top: 0; left: 0;" onclick="openNav()">&#9776; Open</span> 
+
+    <!-- Sidebar Navigation -->
+    <div id="mySideNav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a onclick="welcome();" data-toggle="modal" data-target="#welcome">About Us</a>
+        <a href="base.html">Home</a>
+        <a href="log_stuff.html">Fitness & Health Log</a>
+        <a href="settings.html">Settings</a>
+    </div>
+
+    <!-- About Us Popup -->
+    <div id="welcome" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button style="color: blue" onclick="close_welcome();" class="close" data-dismiss="modal">&timesbar;</button>
+                    <h2 style="width: 98%; text-align: center;">Made By TeenTechSF Hackathon Team: Jacob, Sean, Cinty, and Kalani</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h1 class="daily-goals-header">Daily Goals:</h1>
+        <form class="checklist" id="myForm" name="form">
+            <div id="checkboxContainer">
+                <input type="checkbox" id="Correct Posture" name="task1" value="posture" class="largerCheckBox">
+                <label for="task1">Posture correction</label><br>
+                <input type="checkbox" id="Workout/stretch" name="task2" value="workout" class="largerCheckBox">
+                <label for="task2">Workout/stretch routines</label><br>
+                <input type="checkbox" id="Drink Water" name="task3" value="water" class="largerCheckBox">
+                <label for="task3">Drink enough water!</label><br>
+                <input type="checkbox" id="Eat Healthly" name="task4" value="food" class="largerCheckBox">
+                <label for="task4">Eat healthy</label><br>
+            </div>
+            <button type="submit" class="btn-grad2">Submit</button>
+            <button class="btn-grad2" onclick="openMinimizedWindow('timer_page.html')">Start timer</button>
+            <input type="text" id="checkboxInput" placeholder="Enter checkbox label">
+            <button class="btn btn-success" onclick="addCheckbox()">Add Checkbox</button>
+        </form>
+    </div>
+    <br>
+
+    <script>
+        function openMinimizedWindow(url) {
+            var newWindow = window.open(url, '_blank', 'width=200,height=100');
+            if (newWindow) {
+                newWindow.resizeTo(0, 0);
+            }
+        }
+
+        var notificationsEnabled = localStorage.getItem('notification');
+
+        function openNav() {
+            document.getElementById("mySideNav").style.width = "450px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySideNav").style.width = "0px";
+        }
+
+        function displayNotification(message) {
+            if (!("Notification" in window)) {
+                console.error("This browser does not support system notifications");
+                return;
+            }
+            if (Notification.permission === "granted") {
+                var notification = new Notification("New Notification", {
+                    body: message
+                });
+            }
+        }
+
+        function countCheckboxes() {
+            var checkboxes = document.querySelectorAll('#myForm input[type="checkbox"]');
+            return checkboxes.length;
+        }
+
+        function loadCheckboxState() {
+            var uncheckedCheckboxes = JSON.parse(localStorage.getItem('uncheckedCheckboxList')) || [];
+            uncheckedCheckboxes.forEach(function (checkboxId) {
+                var checkbox = document.getElementById(checkboxId);
+                if (checkbox) {
+                    checkbox.checked = false;
+                }
+            });
+        }
+
+        function handleFormSubmission(event) {
+            event.preventDefault();
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var uncheckedCheckboxes = [];
+            checkboxes.forEach(function (checkbox) {
+                if (!checkbox.checked) {
+                    uncheckedCheckboxes.push(checkbox.id);
+                }
+            });
+            localStorage.setItem('uncheckedCheckboxList', JSON.stringify(uncheckedCheckboxes));
+            var uncheckedCheckboxesString = JSON.stringify(uncheckedCheckboxes);
+        }
+
+        function addCheckbox() {
+            var checkboxLabel = document.getElementById('checkboxInput').value;
+            if (checkboxLabel.trim() === '') {
+                alert('Please enter a label for the checkbox.');
+                return;
+            }
+            var checkboxContainer = document.getElementById('checkboxContainer');
+            var checkbox = document.createElement('input');
+
+            checkbox.type = 'checkbox';
+            checkbox.id = checkboxLabel;
+            checkbox.name = checkboxLabel;
+            checkbox.value = checkboxLabel;
+
+            var label = document.createElement('label');
+            label.appendChild(document.createTextNode(checkboxLabel));
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+            var br = document.createElement('br');
+            checkboxContainer.appendChild(br);
+
+            document.getElementById('checkboxInput').value = '';
+            document.getElementById('myForm').removeEventListener('submit', handleFormSubmission);
+            document.getElementById('myForm').addEventListener('submit', handleFormSubmission);
+        }
+
+        if (notificationsEnabled == 'true') {
+            document.getElementById('myForm').addEventListener('submit', handleFormSubmission);
+        }
+
+        window.onload = loadCheckboxState;
+    </script>
+</body>
+</html>
