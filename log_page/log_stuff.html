@@ -1,1 +1,87 @@
+  <!DOCTYPE html>
+  <html>
+      <head>
+          <title>Fitness & Health Log</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+          <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+          <link rel="stylesheet" type="text/css" href="log.css">
+      </head>
+      <body>
+          <div class="header">    
+              <h1>Fitness & Health Log</h1>
+          </div>
 
+          <!--Sidebar Navigation-->
+          <div id="mySideNav" class="sidenav">
+              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+              <a onclick="welcome();" data-toggle="modal" data-target="#welcome">About Us</a>
+              <a href="base.html">Home</a>
+              <a href="goal.html">Goals</a>
+              <a href="settings.html">Settings</a>
+            </div>
+            <span style="font-size:50px;cursor:pointer; margin-left: 25px;" onclick="openNav()">&#9776; open</span>
+          
+            <!--HTML About Us Popup-->
+          <div id="welcome" class="modal fade">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button style = 'color:blue' onclick = 'close_welcome();' class="close" data-dismiss = 'modal'>&timesbar;</button>
+                    <h2 style="width:98%">Empowering individuals to cultivate healthy habits is not just a goal; it's our mission. Together, let's embrace a lifestyle that nourishes our bodies, minds, and spirits. Through encouragement and support, we aspire to inspire everyone to embark on a journey towards well-being. Your health matters, and the choices you make today shape the vitality of your tomorrows. Join us in fostering a community where healthy habits flourish, and each step taken is a stride toward a more vibrant and fulfilling life.</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="container">
+              <form id="healthForm">
+                <label for="breakfast">Breakfast:</label>
+                <div id="breakfastInputs">
+                    <input type="text" name="breakfast" list="foodSuggestions" required>
+                </div>
+                <button type="button" class="addFoodButton" data-meal="breakfast">Add Food</button>
+                
+                <label for="lunch">Lunch:</label>
+                <div id="lunchInputs">
+                    <input type="text" name="lunch" list="foodSuggestions" required>
+                </div>
+                <button type="button" class="addFoodButton" data-meal="lunch">Add Food</button>
+                
+                <label for="dinner">Dinner:</label>
+                <div id="dinnerInputs">
+                    <input type="text" name="dinner" list="foodSuggestions" required>
+                </div>
+                <button type="button" class="addFoodButton" data-meal="dinner">Add Food</button>
+                <label for="exerciseType">Excerise Type:</label>
+                  <select id="exerciseType" name="exerciseType" onchange="checkOtherOption()">
+                      <option value="running">Running</option>
+                      <option value="cycling">Cycling</option>
+                      <option value="swimming">Swimming</option>
+                      <option value="weightlifting">Weightlifting</option>
+                      <option value="interval">Interval Workout</option>
+                      <option value="other">Other</option>
+                  </select>
+                <input type="text" id="otherExerciseType" name="otherExerciseType" placeholder="Enter other exercise type" style="display: none;">
+                  <button type="button" id="submit" onclick="logEntry()">Log Entry</button>
+            </form>
+                  
+            <datalist id="foodSuggestions"></datalist>
+                  
+
+              <div id="logOutput"></div>
+          </div>
+          <script src="log.js"></script>
+          <script>
+              // sidenav overlay
+              function openNav(){
+                document.getElementById("mySideNav").style.width = "250px";
+              }
+              function closeNav(){
+                document.getElementById("mySideNav").style.width = "0px";
+              }
+          </script>
+      </body>
+  </html>
