@@ -10,7 +10,7 @@
         <link rel="icon" href="favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" type="text/css" href="style.css">
-        <script src="notifications.js"></script>
+        
     </head>
     <body>
         <div class="header">
@@ -54,15 +54,35 @@
                 <label for="task4">Eat healthy</label><br>
                 
               </div>
-              <button type="submit" class="btn-grad2">Submit</button> 
-              <button class="btn-grad2" onclick="openMinimizedWindow('timer_page.html')">Start timer</button>
+              <button type="submit" class="btn-grad2" >Submit</button> 
+              <button class="btn-grad2" onclick="openMinimizedWindow('timer_page.html')">Began working</button>
               <input type="text" id="checkboxInput" placeholder="Enter checkbox label" >
               <button onclick="addCheckbox()">Add Checkbox</button>
+              <div id="buttonContainer">
+                <br>
+                <button type="submit">Submit</button>
+                <br>
+                <div id="successMessage" style="display:none;">Success! Your message has been submitted.</div>
+              </div>
             </form>
+            
         </div>
         <br>
        
         <script>
+          
+            document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally
+
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+
+            // Hide success message after 3 seconds
+            setTimeout(function() {
+              document.getElementById('successMessage').style.display = 'none';
+            }, 3000);
+          });
+          
           function openMinimizedWindow(url) {
             // Open a new window
             var newWindow = window.open(url, '_blank', 'width=200,height=100');
@@ -133,7 +153,7 @@
               checkbox.id = checkboxLabel;
               checkbox.name = checkboxLabel;
               checkbox.value = checkboxLabel;
-
+              checkbox.className = 'largerCheckBox';
               var label = document.createElement('label');
               label.appendChild(document.createTextNode(checkboxLabel));
               checkboxContainer.appendChild(checkbox);
