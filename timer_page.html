@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        
+
+        var myInterval;
+        function showNotification() {
+        if (localStorage.getItem('notification') === 'true'&& Notification.permission === "granted") {
+            var notification = new Notification("Timer Notification", {
+                body:  localStorage.getItem('uncheckedCheckboxList'),
+                icon: "notification_icon.png" // Path to your notification icon
+            });
+        }
+    }
+    if (localStorage.getItem('notification') === 'true' && Notification.permission !== "granted") {
+        Notification.requestPermission().then(function(permission) {
+            if (permission === "granted") {
+                console.log("Notifications permission granted.");
+            }
+        });
+    }
+    
+    myInterval = setInterval(showNotification, 5 * 1000); // Start showing notifications every 5 seconds
+    
+    
+
+
+    </script>
+</body>
+</html>
