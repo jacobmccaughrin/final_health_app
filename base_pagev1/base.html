@@ -1,1 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Health Reminder App</title>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
 
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <div class="header">
+          <center style="scale:0.8;">
+            <section>
+              <img src="images/Healthy food Healthy life.png">
+            </section>
+            <section>
+              <h1 style="font-size: 250%;">Welcome!</h1>
+            </section>
+          </center>
+        </div>
+
+        <!--Sidebar Navigation-->
+        <div id="mySideNav" class="sidenav">
+          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a onclick="welcome();" data-toggle="modal" data-target="#welcome">About Us</a>
+          <a href="log_stuff.html">Fitness & Health Log</a>
+          <a href="goal.html">Goal Settings</a>
+          <a onclick="settings()" data-toggle="modal" data-target="#settings">Notification Settings</a>
+        </div>
+        <div style="display: flex;">
+          <span style="font-size: 2.5vw; cursor: pointer; margin-left: 1vw;position: absolute; top: 0; left: 0;" onclick="openNav()">&#9776; Open</span><br>
+          <div class="image-container" style="scale: 0.7; margin-top: -1vw;">
+            <img src="images/carbs.jpg" alt="Veggie Facts">
+            <p>Carbs are your body's energy currency!</p>
+          </div>
+
+          <div class="image-container" style="scale: 0.7; margin-top: -0.25vw;">
+            <img src="images/veggies.png" alt="Veggie Facts">
+            <p>Vegetables boost your energy!</p>
+          </div>
+
+          <div class="image-container" style="scale: 0.6; margin-top: -2vw;">
+            <img src="images/protein.png" alt="Veggie Facts">
+            <p>Proteins play diverse roles in the body!</p>
+          </div>
+        </div>
+      
+          <!--HTML About Us Popup-->
+          <div id="welcome" class="modal fade" style="margin-left: 25px; width: 1500px;">
+            <div class="modal-dialog center">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button style = 'color:blue' onclick = 'close_welcome();' class="close" data-dismiss = 'modal'>&timesbar;</button>
+                  <center>
+                    <h2>Made By TeenTechSF Hackathon Team: Jacob, Sean, Cinty, and Kalani</h4>
+                  </center>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Settings Modal -->
+          <div id="settings" class="modal fade">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button style='color:rgb(0, 0, 0)' onclick='close_settings();' class="close" data-dismiss='modal'>&times;</button>
+                        <div class="menu">
+                          <center>
+                            <h1 style="font-size: 50px;">Settings</h1>
+                            <input id="notificationButton" type="radio" name="notifs">
+                            <label id="notificationLabel" for="enable">Enable Notifications</label>
+                            <input id="disableNotificationButton" type="radio" name="notifs">
+                            <label id="disableNotificationLabel" for="disable">Disable Notifications</label>
+                          </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+          var notificationsEnabled = false;
+          document.getElementById('notificationButton').addEventListener('click', enableNotifications);
+          document.getElementById('disableNotificationButton').addEventListener('click', disableNotifications);
+          
+          function enableNotifications() {
+              notificationsEnabled = true;
+              displayNotification("enabled Notification permissions!");
+          }
+          
+          function disableNotifications() {
+              notificationsEnabled = false;
+              displayNotification("disabled Notification permissions!");
+          }
+          
+          function displayNotification(message) {
+              if (!("Notification" in window)) {
+                  console.error("This browser does not support system notifications");
+                  return;
+              }
+              if (Notification.permission === "granted") {
+                  var notification = new Notification("New Notification", {
+                      body: message
+                  });
+              }
+          }
+        function handleFormSubmission(event) {
+            event.preventDefault();
+            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            var uncheckedCheckboxes = [];
+            checkboxes.forEach(function (checkbox) {
+                if (!checkbox.checked) {
+                    uncheckedCheckboxes.push(checkbox.id);
+                }
+            });
+            if (uncheckedCheckboxes.length > 0 && notificationsEnabled == true) {
+                var message = "You have not checked the following tasks: " + uncheckedCheckboxes.join(', ');
+                displayNotification(message);
+            } else if(notificationsEnabled == true){
+                displayNotification("All tasks are checked!");
+            }
+        }
+        
+        function addCheckbox() {
+            var checkboxLabel = document.getElementById('checkboxInput').value;
+            if (checkboxLabel.trim() === '') {
+                alert('Please enter a label for the checkbox.');
+                return;
+            }
+            var checkboxContainer = document.getElementById('checkboxContainer');
+            var checkbox = document.createElement('input');
+
+            checkbox.type = 'checkbox';
+            checkbox.id = 'task' + (countCheckboxes() + 1);
+            checkbox.name = checkboxLabel;
+            checkbox.value = checkboxLabel;
+
+            var label = document.createElement('label');
+            label.appendChild(document.createTextNode(checkboxLabel));
+            checkboxContainer.appendChild(checkbox);
+            checkboxContainer.appendChild(label);
+            var br = document.createElement('br');
+            checkboxContainer.appendChild(br);
+
+            val = countCheckboxes('myForm')
+            document.getElementById('checkboxInput').value = '';
+            // Update event listener for form submission
+            document.getElementById('myForm').removeEventListener('submit', handleFormSubmission);
+            document.getElementById('myForm').addEventListener('submit', handleFormSubmission);
+        }
+            // Retrieve checkbox states from local storage and set them on page load
+            window.onload = function() {
+              const form = document.getElementById('myForm');
+              const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+              
+              checkboxes.forEach(checkbox => {
+                const storedValue = localStorage.getItem(checkbox.id);
+                checkbox.checked = storedValue === 'true';
+        
+                // Update local storage when checkbox state changes
+                checkbox.addEventListener('change', function() {
+                  localStorage.setItem(checkbox.id, this.checked);
+                });
+              });
+            };
+            function welcome()
+            {
+              document.getElementById("welcome").play();
+            }
+
+            function close_welcome()
+            {
+              document.getElementById("close_welcome").play();
+            }
+
+            // sidenav overlay
+            function openNav(){
+              document.getElementById("mySideNav").style.width = "450px";
+            }
+            function closeNav(){
+              document.getElementById("mySideNav").style.width = "0px";
+            }
+
+            function settings()
+            {
+              document.getElementById("settings").play();
+            }
+
+            function close_settings()
+            {
+              document.getElementById("close_settings").play();
+            }
+          </script>
+    </body>
+</html>
